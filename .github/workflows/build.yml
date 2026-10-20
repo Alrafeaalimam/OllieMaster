@@ -26,13 +26,16 @@ jobs:
           yes | sdkmanager --licenses > /dev/null 2>&1 || true
           sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
-      - name: Generate Wrapper
-        run: gradle wrapper --gradle-version 8.2
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 8.2
 
       - name: Build with Gradle
         run: |
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+          gradle wrapper
           chmod +x gradlew
           ./gradlew assembleDebug
 
